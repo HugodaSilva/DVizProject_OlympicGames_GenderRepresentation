@@ -11,7 +11,7 @@ import numpy as np
 df = pd.read_csv('OlympicGames1896to2014.csv',
                  quotechar='"',
                  header=0,
-                 delimiter=";")
+                 delimiter=",")
 
 
 

@@ -66,6 +66,24 @@ fig_bar.show()
 
 
 
+######## Plot 2 - Gender Representation Olympic Games ######### 
+#Define the labels
+label_Gender = df["Gender"].value_counts().keys().tolist()
+
+#Define the values
+value_Gender = df["Gender"].value_counts().values.tolist()
+
+#Define the data to plot
+data_Gender = dict(type='pie', labels=label_Gender, values=value_Gender,marker_colors=['#87CEFA', '#FFC0CB'], hole=0.60)
+
+layout_Gender = dict(title=dict(text='Gender Percentage in Olympic Games')
+                 )
+
+#Show Figure
+fig_Gender = go.Figure(data=[data_Gender], layout=layout_Gender)
+fig_Gender.show()
+
+
 # The App itself
 
 app = dash.Dash(__name__)
@@ -81,6 +99,10 @@ app.layout = html.Div([
     dcc.Graph(
         id='Number of Medals per Gender',
         figure=fig_bar
+    )
+      dcc.Graph(
+        id='ender Percentage in Olympic Gamesr',
+        figure=fig_Gender
     )
 ])
 

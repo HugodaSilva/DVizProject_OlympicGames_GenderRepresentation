@@ -7,44 +7,63 @@ import numpy as np
 
 # Dataset 'Loading'
 
-#Load the Olympics Games DataFrame into pandas
-df_summer = pd.read_csv('OlympicGames1896to2014.csv',
+# Load the Olympics Games DataFrame into pandas
+df = pd.read_csv('OlympicGames1896to2014.csv',
                  quotechar='"',
                  header=0,
                  delimiter=";")
 
 
 
+######## Plot 1 - Gender Representation per Year ######### 
+# -- Step 1 -- Define the data
+df_GenderPerYear = pd.pivot_table(df, values='Athlete', index=['Year'], columns=['Gender'], aggfunc=len)
+
+# -- Step 2 -- Prepare Data to plot
+
+data_Men = (dict(type='bar',
+                     x=df_GenderPerYear.index,
+                     y=df_GenderPerYear['Men'],
+                     text=df_GenderPerYear['Men'],
+                     textposition='auto',
+                     name="Men",
+                     marker_color="#87CEFA",
+                     hovertemplate="Year: <b>%{x}</b><br>"+
+                                   "Number of Medals: <b>%{y}</b><br>" +
+                                   "Gender: <b>Men</b><br>",
+                    )
+               )
+
+data_Women = (dict(type='bar',
+                     x=df_GenderPerYear.index,
+                     y=df_GenderPerYear['Women'],
+                     text=df_GenderPerYear['Women'],
+                     textposition='auto',
+                     name="Women",
+                     marker_color="#FFC0CB",
+                     hovertemplate="Year: <b>%{x}</b><br>"+
+                                   "Number of Medals: <b>%{y}</b><br>" +
+                                   "Gender: <b>Women</b><br>",
+                    )
+               )
+    
+
+data_bar =[data_Men,data_Women]
+    
+    
+# Define the Layout
+layout_bar = dict(title=dict(text='Number of Medals per Gender'),
+                 yaxis=dict(title='Number of Medals', tickfont = dict(size = 9)),
+                 xaxis=dict(title="Year", tickfont = dict(size = 9)),
+                 )
 
 
+# -- Step 3 -- Show Figure
 
-# Building our Graphs (nothing new here)
+# Show the Figure
+fig_bar = go.Figure(data=data_bar, layout=layout_bar)
+fig_bar.show() 
 
-data_choropleth = dict(type='choropleth',
-                       locations=df_emission_0['country_name'],  #There are three ways to 'merge' your data with the data pre embedded in the map
-                       locationmode='country names',
-                       z=np.log(df_emission_0['CO2_emissions']),
-                       text=df_emission_0['country_name'],
-                       colorscale='inferno',
-                       colorbar=dict(title='CO2 Emissions log scaled')
-                      )
-
-layout_choropleth = dict(geo=dict(scope='world',  #default
-                                  projection=dict(type='orthographic'
-                                                 ),
-                                  #showland=True,   # default = True
-                                  landcolor='black',
-                                  lakecolor='white',
-                                  showocean=True,   # default = False
-                                  oceancolor='azure'
-                                 ),
-                         
-                         title=dict(text='World Choropleth Map',
-                                    x=.5 # Title relative position according to the xaxis, range (0,1)
-                                   )
-                        )
-
-fig = go.Figure(data=data_choropleth, layout=layout_choropleth)
 
 
 

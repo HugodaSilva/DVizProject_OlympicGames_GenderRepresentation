@@ -5,11 +5,18 @@ import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 
-# Dataset 'Processing'
+# Dataset 'Loading'
 
-df_emissions = pd.read_csv('emission_full.csv')
+#Load the Olympics Games DataFrame into pandas
+df_summer = pd.read_csv('OlympicGames1896to2014.csv',
+                 quotechar='"',
+                 header=0,
+                 delimiter=";")
 
-df_emission_0 = df_emissions.loc[df_emissions['year']==2000]
+
+
+
+
 
 # Building our Graphs (nothing new here)
 

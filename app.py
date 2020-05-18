@@ -99,7 +99,9 @@ app.layout = html.Div([
     dcc.Graph(
         id='Number of Medals per Gender',
         figure=fig_bar
-    )
+    ),
+  
+    html.Br(),
   
     dcc.Graph(
         id='Gender Percentage in Olympic Gamesr',

@@ -73,7 +73,11 @@ app = dash.Dash(__name__)
 server = app.server
 
 app.layout = html.Div([
-    html.img(src='https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Olympic_Rings.svg/1200px-Olympic_Rings.svg.png'),  
+    html.Div[
+      html.img(src=app.get_asset_url("src='https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Olympic_Rings.svg/1200px-Olympic_Rings.svg.png'"),
+               alt="Olympic Games logo",
+               id="logo",), 
+    ]
   
     html.H1('Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'),
 

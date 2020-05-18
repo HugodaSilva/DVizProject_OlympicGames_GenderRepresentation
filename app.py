@@ -73,12 +73,14 @@ app = dash.Dash(__name__)
 server = app.server
 
 app.layout = html.Div([
-    html.H1('My First DashBoard'),
+    html.img(src='https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Olympic_Rings.svg/1200px-Olympic_Rings.svg.png'),  
+  
+    html.H1('Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'),
 
-    html.Div('Example of html Container'),
+    html.Div('Number of Medals per Gender'),
 
     dcc.Graph(
-        id='example-graph',
+        id='Number of Medals per Gender',
         figure=fig_bar
     )
 ])

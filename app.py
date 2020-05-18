@@ -66,31 +66,22 @@ fig_bar.show()
 
 
 
-
 # The App itself
 
 app = dash.Dash(__name__)
 
 server = app.server
 
+app.layout = html.Div([
+    html.H1('My First DashBoard'),
 
-
-
-app.layout = html.Div(children=[
-    html.H1(children='My First DashBoard'),
-
-    html.Div(children='''
-        Example of html Container
-    '''),
+    html.Div('Example of html Container'),
 
     dcc.Graph(
         id='example-graph',
-        figure=fig
+        figure=fig_bar
     )
 ])
-
-
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)

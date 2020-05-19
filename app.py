@@ -128,9 +128,6 @@ fig_corr = go.Figure(data=data_corr,layout=layout_corr)
 
 
 
-
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
 # The App itself
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)

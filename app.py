@@ -130,7 +130,7 @@ fig_corr = go.Figure(data=data_corr,layout=layout_corr)
 
 # The App itself
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__)
 
 server = app.server
 

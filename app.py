@@ -156,7 +156,7 @@ app.layout = html.Div([
     html.Div([
         html.Div(
             html.Img(
-                src=app.get_asset_url("assets/Olympic_Rings.png"),
+                src="assets/Olympic_Rings.png",
                 alt="Olympic Ganmes logo",
                 id="logo",
                 width="20%",

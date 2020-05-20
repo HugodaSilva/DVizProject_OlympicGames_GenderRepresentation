@@ -16,6 +16,23 @@ df = pd.read_csv(path + 'OlympicGames1896to2014.csv',
                  header=0,
                  delimiter=",")
 
+
+
+country_options = [dict(label=country, value=country) for country in df['Country_Name'].unique()]
+
+
+dropdown_country = dcc.Dropdown(
+        id='country_drop',
+        options=country_options,
+        multi=True
+    )
+
+slider_year = dcc.RangeSlider(
+        id='year_slider',
+        min=df['Year'].min(),
+        max=df['Year'].max(),
+    )
+
 ######## Plot 1 - Gender Representation per Year #########
 # -- Step 1 -- Define the data
 df_GenderPerYear = pd.pivot_table(df, values='Athlete', index=['Year'], columns=['Gender'], aggfunc=len)
@@ -151,8 +168,19 @@ app.layout = html.Div([
         ),
     ]),
 
-    html.Div('Number of Medals per Gender'),
+    html.Br(),
 
+    html.Label('Country Choice'),
+    dropdown_country,
+
+    html.Br(),
+
+    html.Label('Year Slider'),
+    slider_year,
+
+    html.Br(),
+
+    html.Div('We can write some text here to explain the purpose of the graph'),
         dcc.Graph(
             id='Number of Medals per Gender',
             figure=fig_bar
@@ -160,6 +188,7 @@ app.layout = html.Div([
 
         html.Br(),
 
+    html.Div('We can write some text here to explain the purpose of the graph'),
         dcc.Graph(
             id='Gender Percentage in Olympic Games',
             figure=fig_Gender
@@ -167,6 +196,7 @@ app.layout = html.Div([
 
         html.Br(),
 
+    html.Div('We can write some text here to explain the purpose of the graph'),
         dcc.Graph(
             id='Gender Representation Olympic Games per Year and Sport',
             figure=fig_corr

@@ -79,6 +79,54 @@ layout_Gender = dict(title=dict(text='Gender Percentage in Olympic Games')
 fig_Gender = go.Figure(data=[data_Gender], layout=layout_Gender)
 
 
+######## Plot 3 - Gender Representation Olympic Games per Year and Sport #########
+# -- Step 1 -- Define the data
+df_Plot_Woman = pd.pivot_table(df[df['Gender']=="Women"], values='Medal', index=['Year'], columns=['Sport'], aggfunc=len,dropna=False)
+df_Plot_Woman[df_Plot_Woman>0]=2
+df_Plot_Woman[np.isnan(df_Plot_Woman)] = 1
+df_Plot_Men = pd.pivot_table(df[df['Gender']=="Men"], values='Medal', index=['Year'], columns=['Sport'], aggfunc=len)
+df_Plot_Men[df_Plot_Men>0]=3
+df_Plot_Men[np.isnan(df_Plot_Men)] = 1
+df_Sport_Year=df_Plot_Men*df_Plot_Woman
+df_Sport_Year[np.isnan(df_Sport_Year)]=df_Plot_Men
+df_Sport_Year[np.isnan(df_Sport_Year)]=df_Plot_Woman
+df_Sport_Year[df_Sport_Year==1]=0
+df_Plot=df_Sport_Year.T
+df_Sport_Year.replace(0,np.nan, inplace=True)
+df_Sport_Year.replace(6,1, inplace=True)
+df_Sport_Year.replace(3,0.5, inplace=True)
+df_Sport_Year.replace(2,0.25, inplace=True)
+
+# -- Step 2 -- Prepare Data to plot
+
+# Define the Values of the Heatmap
+y_corr = df_Plot.index
+x_corr = df_Plot.columns
+z_corr = df_Plot
+
+data_corr = dict(type='heatmap',
+                 x=x_corr,
+                 y=y_corr,
+                 z=z_corr,
+                 colorscale=[[0, '#FFC0CB'], [0.33, '#FFC0CB'],[0.33, '#87CEFA'],[0.66, '#87CEFA'],[0.66,'#c3e4a1'],[1,'#c3e4a1']],
+                 hovertemplate="Column: <b>%{x}</b><br>" +
+                                "Line: <b>%{y}</b><br>"+
+                                "Played by: <b>%{z}</b><br>",
+                )
+
+layout_corr = dict(title = "Sports played per Gender",
+                        autosize = False,
+                        height  = 800,
+                        width   = 800,
+                        yaxis   = dict(tickfont = dict(size = 9)),
+                        xaxis   = dict(tickfont = dict(size = 9))
+                  )
+# -- Step 3 -- Show Figure
+
+# Show the Figure
+fig_corr = go.Figure(data=data_corr,layout=layout_corr)
+
+
 
 # The App itself
 
@@ -88,18 +136,20 @@ server = app.server
 
 app.layout = html.Div([
 
-    html.Div(
+    html.Div([
         html.Div(
             html.Img(
                 src=app.get_asset_url("Olympic_Rings.png"),
                 alt="Olympic Ganmes logo",
                 id="logo",
+                width="20%",
+                height="20%",
             ),
         ),
-    ),
-
-
-    html.H1('Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'),
+        html.Div(
+            html.H1('Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'),
+        ),
+    ]),
 
     html.Div('Number of Medals per Gender'),
 
@@ -115,6 +165,12 @@ app.layout = html.Div([
             figure=fig_Gender
         ),
 
+        html.Br(),
+
+        dcc.Graph(
+            id='Gender Representation Olympic Games per Year and Sport',
+            figure=fig_corr
+        )
 ])
 
 if __name__ == '__main__':

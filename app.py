@@ -136,6 +136,17 @@ server = app.server
 
 app.layout = html.Div([
 
+    html.Div(
+        html.Div(
+            html.Img(
+                src=app.get_asset_url("Olympic_Rings.png"),
+                alt="Olympic Ganmes logo",
+                id="logo",
+            ),
+        ),
+    ),
+
+
     html.H1('Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'),
 
     html.Div('Number of Medals per Gender'),

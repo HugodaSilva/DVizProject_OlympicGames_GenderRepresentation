@@ -1,149 +1,49 @@
+# -------------------------------------------------------------------------------------------------------------------#
+# -------------------------------------------- Import Packages ------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------------------#
+
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objects as go
-import pandas as pd
+from dash.dependencies import Input, Output, State
 import numpy as np
+import pandas as pd
+import plotly.graph_objs as go
 
-# Dataset 'Loading'
+# -------------------------------------------------------------------------------------------------------------------#
+# -------------------------------------------- Dataset Loading ------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------------------#
 
 # Load the Olympics Games DataFrame into pandas
 
 path = 'https://raw.githubusercontent.com/HugodaSilva/DVizProject_OlympicGames_GenderRepresentation/master/'
-
 df = pd.read_csv(path + 'OlympicGames1896to2014.csv',
                  quotechar='"',
                  header=0,
                  delimiter=",")
 
+# -------------------------------------------------------------------------------------------------------------------#
+# ------------------------------------------ Filters definition -----------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------------------#
 
 
-country_options = [dict(label=country, value=country) for country in df['Country_Name'].unique()]
-
+country_options = [dict(label=country.replace('_', ' '), value=country) for country in
+                   sorted(df['Country_Name'].unique())]
 
 dropdown_country = dcc.Dropdown(
-        id='country_drop',
-        options=country_options,
-        multi=True
-    )
+    id='country_drop',
+    options=country_options,
+    value=[],
+    multi=True
+)
 
-slider_year = dcc.RangeSlider(
-        id='year_slider',
-        min=df['Year'].min(),
-        max=df['Year'].max(),
-    )
+# create years dict
+years_select = {str(i): '{}'.format(str(i)) for i in df['Year'].unique()}
+years_select[str(1892)] = "All"
 
-######## Plot 1 - Gender Representation per Year #########
-# -- Step 1 -- Define the data
-df_GenderPerYear = pd.pivot_table(df, values='Athlete', index=['Year'], columns=['Gender'], aggfunc=len)
-
-# -- Step 2 -- Prepare Data to plot
-
-data_Men = (dict(type='bar',
-                 x=df_GenderPerYear.index,
-                 y=df_GenderPerYear['Men'],
-                 text=df_GenderPerYear['Men'],
-                 textposition='auto',
-                 name="Men",
-                 marker_color="#87CEFA",
-                 hovertemplate="Year: <b>%{x}</b><br>" +
-                               "Number of Medals: <b>%{y}</b><br>" +
-                               "Gender: <b>Men</b><br>",
-                 )
-            )
-
-data_Women = (dict(type='bar',
-                   x=df_GenderPerYear.index,
-                   y=df_GenderPerYear['Women'],
-                   text=df_GenderPerYear['Women'],
-                   textposition='auto',
-                   name="Women",
-                   marker_color="#FFC0CB",
-                   hovertemplate="Year: <b>%{x}</b><br>" +
-                                 "Number of Medals: <b>%{y}</b><br>" +
-                                 "Gender: <b>Women</b><br>",
-                   )
-              )
-
-data_bar = [data_Men, data_Women]
-
-# Define the Layout
-layout_bar = dict(title=dict(text='Number of Medals per Gender'),
-                  yaxis=dict(title='Number of Medals', tickfont=dict(size=9)),
-                  xaxis=dict(title="Year", tickfont=dict(size=9)),
-                  )
-
-# -- Step 3 -- Show Figure
-
-# Show the Figure
-fig_bar = go.Figure(data=data_bar, layout=layout_bar)
-
-######## Plot 2 - Gender Representation Olympic Games #########
-# Define the labels
-label_Gender = df["Gender"].value_counts().keys().tolist()
-
-# Define the values
-value_Gender = df["Gender"].value_counts().values.tolist()
-
-# Define the data to plot
-data_Gender = dict(type='pie', labels=label_Gender, values=value_Gender, marker_colors=['#87CEFA', '#FFC0CB'],
-                   hole=0.60)
-
-layout_Gender = dict(title=dict(text='Gender Percentage in Olympic Games')
-                     )
-
-# Show Figure
-fig_Gender = go.Figure(data=[data_Gender], layout=layout_Gender)
-
-
-######## Plot 3 - Gender Representation Olympic Games per Year and Sport #########
-# -- Step 1 -- Define the data
-df_Plot_Woman = pd.pivot_table(df[df['Gender']=="Women"], values='Medal', index=['Year'], columns=['Sport'], aggfunc=len,dropna=False)
-df_Plot_Woman[df_Plot_Woman>0]=2
-df_Plot_Woman[np.isnan(df_Plot_Woman)] = 1
-df_Plot_Men = pd.pivot_table(df[df['Gender']=="Men"], values='Medal', index=['Year'], columns=['Sport'], aggfunc=len)
-df_Plot_Men[df_Plot_Men>0]=3
-df_Plot_Men[np.isnan(df_Plot_Men)] = 1
-df_Sport_Year=df_Plot_Men*df_Plot_Woman
-df_Sport_Year[np.isnan(df_Sport_Year)]=df_Plot_Men
-df_Sport_Year[np.isnan(df_Sport_Year)]=df_Plot_Woman
-df_Sport_Year[df_Sport_Year==1]=0
-df_Plot=df_Sport_Year.T
-df_Sport_Year.replace(0,np.nan, inplace=True)
-df_Sport_Year.replace(6,1, inplace=True)
-df_Sport_Year.replace(3,0.5, inplace=True)
-df_Sport_Year.replace(2,0.25, inplace=True)
-
-# -- Step 2 -- Prepare Data to plot
-
-# Define the Values of the Heatmap
-y_corr = df_Plot.index
-x_corr = df_Plot.columns
-z_corr = df_Plot
-
-data_corr = dict(type='heatmap',
-                 x=x_corr,
-                 y=y_corr,
-                 z=z_corr,
-                 colorscale=[[0, '#FFC0CB'], [0.33, '#FFC0CB'],[0.33, '#87CEFA'],[0.66, '#87CEFA'],[0.66,'#c3e4a1'],[1,'#c3e4a1']],
-                 hovertemplate="Column: <b>%{x}</b><br>" +
-                                "Line: <b>%{y}</b><br>"+
-                                "Played by: <b>%{z}</b><br>",
-                )
-
-layout_corr = dict(title = "Sports played per Gender",
-                        autosize = False,
-                        height  = 800,
-                        width   = 800,
-                        yaxis   = dict(tickfont = dict(size = 9)),
-                        xaxis   = dict(tickfont = dict(size = 9))
-                  )
-# -- Step 3 -- Show Figure
-
-# Show the Figure
-fig_corr = go.Figure(data=data_corr,layout=layout_corr)
-
-
+# -------------------------------------------------------------------------------------------------------------------#
+# --------------------------------------------------- APP -----------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------------------#
 
 # The App itself
 
@@ -176,32 +76,233 @@ app.layout = html.Div([
     html.Br(),
 
     html.Label('Year Slider'),
-    slider_year,
+    html.Div([
+        dcc.RangeSlider(
+            id='year_slider',
+            min=1896,
+            max=2014,
+            value=[1896, 2014],
+            marks={'1896' : '1896',
+                    '1900' : '1900',
+                    '1904' : '1904',
+                    '1908' : '1908',
+                    '1912' : '1912',
+                    '1920' : '1920',
+                    '1924' : '1924',
+                    '1928' : '1928',
+                    '1932' : '1932',
+                    '1936' : '1936',
+                    '1948' : '1948',
+                    '1952' : '1952',
+                    '1956' : '1956',
+                    '1960' : '1960',
+                    '1964' : '1964',
+                    '1968' : '1968',
+                    '1972' : '1972',
+                    '1976' : '1976',
+                    '1980' : '1980',
+                    '1984' : '1984',
+                    '1988' : '1988',
+                    '1992' : '1992',
+                    '1994' : '1994',
+                    '1996' : '1996',
+                    '1998' : '1998',
+                    '2000' : '2000',
+                    '2002' : '2002',
+                    '2004' : '2004',
+                    '2006' : '2006',
+                    '2008' : '2008',
+                    '2010' : '2010',
+                    '2012' : '2012',
+                    '2014' : '2014',},
+            step=4
+        )
+    ], id='slider'
+    ),
 
     html.Br(),
 
     html.Div('We can write some text here to explain the purpose of the graph'),
-        dcc.Graph(
-            id='Number of Medals per Gender',
-            figure=fig_bar
-        ),
+    dcc.Graph(
+        id='Gender_Percentage'
+    ),
 
-        html.Br(),
-
-    html.Div('We can write some text here to explain the purpose of the graph'),
-        dcc.Graph(
-            id='Gender Percentage in Olympic Games',
-            figure=fig_Gender
-        ),
-
-        html.Br(),
+    html.Br(),
 
     html.Div('We can write some text here to explain the purpose of the graph'),
-        dcc.Graph(
-            id='Gender Representation Olympic Games per Year and Sport',
-            figure=fig_corr
-        )
+    dcc.Graph(
+        id='Gender_Year'
+    ),
+
+    html.Br(),
+
+    html.Div('We can write some text here to explain the purpose of the graph'),
+    dcc.Graph(
+        id='Gender_Participation'
+    ),
+
+    html.Br(),
 ])
+
+
+@app.callback([
+    Output('Gender_Percentage', 'figure'),
+    Output('Gender_Year', 'figure'),
+    Output('Gender_Participation', 'figure')
+],
+    [
+        #Input("country_drop", "value"),
+        Input("year_slider", "value"),
+    ]
+)
+# -------------------------------------------------------------------------------------------------------------------#
+# -------------------------------------------- Plots Creation -------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------------------#
+
+def update_graphs(year):
+    # define dataset to Plot
+    df_baseline = df[(df['Year'] >= year[0]) & (df['Year'] <= year[1])]
+
+
+    #################################################################
+    ######## Plot 1  - Gender Representation Olympic Games ##########
+    #################################################################
+    # Define the labels
+    label_Gender = df_baseline["Gender"].value_counts().keys().tolist()
+    # Define the values
+    value_Gender = df_baseline["Gender"].value_counts().values.tolist()
+
+    # Define the data to plot
+    data_Gender = dict(type='pie', labels=label_Gender, values=value_Gender, marker_colors=['#87CEFA', '#FFC0CB'],
+                       hole=0.60)
+
+    layout_Gender = dict(title=dict(text='Gender Percentage in Olympic Games')
+                         )
+
+    # Show Figure
+    fig_Gender_Percentage = go.Figure(data=[data_Gender], layout=layout_Gender)
+
+    #################################################################
+    ########## Plot 2  - Gender Representation per Year #############
+    #################################################################
+    # -- Step 1 -- Define the data
+    df_GenderPerYear = pd.pivot_table(df_baseline, values="Athlete", index=["Year"], columns=["Gender"], aggfunc=len)
+
+    # -- Step 2 -- Prepare Data to plot
+
+    data_Men = (dict(type='bar',
+                     x=df_GenderPerYear.index,
+                     y=df_GenderPerYear['Men'],
+                     text=df_GenderPerYear['Men'],
+                     textposition='auto',
+                     name="Men",
+                     marker_color="#87CEFA",
+                     hovertemplate="Year: <b>%{x}</b><br>" +
+                                   "Number of Medals: <b>%{y}</b><br>" +
+                                   "Gender: <b>Men</b><br>",
+                     )
+                )
+
+    data_Women = (dict(type='bar',
+                       x=df_GenderPerYear.index,
+                       y=df_GenderPerYear['Women'],
+                       text=df_GenderPerYear['Women'],
+                       textposition='auto',
+                       name="Women",
+                       marker_color="#FFC0CB",
+                       hovertemplate="Year: <b>%{x}</b><br>" +
+                                     "Number of Medals: <b>%{y}</b><br>" +
+                                     "Gender: <b>Women</b><br>",
+                       )
+                  )
+
+    data_bar = [data_Men, data_Women]
+
+    # Define the Layout
+    layout_bar = dict(title=dict(text='Number of Medals per Gender'),
+                      yaxis=dict(title='Number of Medals', tickfont=dict(size=9)),
+                      xaxis=dict(title="Year", tickfont=dict(size=9)),
+                      )
+
+    # -- Step 3 -- Show Figure
+
+    # Show the Figure
+    fig_Gender_Year = go.Figure(data=data_bar, layout=layout_bar)
+
+    #################################################################
+    ###### Plot 3  - Gender Participantion per Sport per Year #######
+    #################################################################
+
+    # -- Step 1 -- Define the data
+    # - Step 1.1 - Women data
+    df_Plot_Woman = pd.pivot_table(df[df['Gender'] == "Women"], values='Medal', index=['Year'], columns=['Sport'],
+                                   aggfunc=len, dropna=False)
+    df_Plot_Woman[df_Plot_Woman > 0] = 2
+    df_Plot_Woman[np.isnan(df_Plot_Woman)] = 1
+    df_Plot_Men = pd.pivot_table(df[df['Gender'] == "Men"], values='Medal', index=['Year'], columns=['Sport'],
+                                 aggfunc=len)
+
+    # - Step 1.2 - Men data
+    df_Plot_Men[df_Plot_Men > 0] = 3
+    df_Plot_Men[np.isnan(df_Plot_Men)] = 1
+
+    # - Step 1.3 - Multipli Men and Women data
+    df_Sport_Year = df_Plot_Men * df_Plot_Woman
+
+    # - Step 1.4 - Check Missing Values
+    df_Sport_Year[np.isnan(df_Sport_Year)] = df_Plot_Men
+    df_Sport_Year[np.isnan(df_Sport_Year)] = df_Plot_Woman
+    df_Sport_Year[df_Sport_Year == 1] = 0
+
+    # - Step 1.5 - Set the scale
+    df_Sport_Year.replace(0, np.nan, inplace=True)
+    df_Sport_Year.replace(6, 1, inplace=True)
+    df_Sport_Year.replace(3, 0.5, inplace=True)
+    df_Sport_Year.replace(2, 0.25, inplace=True)
+    df_Plot = df_Sport_Year.T
+
+    # - Step 1.6 - Change data for the hover
+    df_Sport_Year_Name = df_Sport_Year.T
+    df_Sport_Year_Name.replace(np.nan, "None", inplace=True)
+    df_Sport_Year_Name.replace(1, "Both", inplace=True)
+    df_Sport_Year_Name.replace(0.5, "Men", inplace=True)
+    df_Sport_Year_Name.replace(0.25, "Women", inplace=True)
+
+    # -- Step 2 -- Prepare Data to plot
+
+    # Define the Values of the Heatmap
+    y_corr = df_Plot.index
+    x_corr = df_Plot.columns
+    z_corr = df_Plot
+    custom = df_Sport_Year_Name
+
+    data_corr = dict(type='heatmap',
+                     x=x_corr,
+                     y=y_corr,
+                     z=z_corr,
+                     customdata=custom,
+                     colorscale=[[0, '#FFC0CB'], [0.33, '#FFC0CB'], [0.33, '#87CEFA'], [0.66, '#87CEFA'],
+                                 [0.66, '#c3e4a1'], [1, '#c3e4a1']],
+                     hovertemplate="Column: <b>%{x}</b><br>" +
+                                   "Line: <b>%{y}</b><br>" +
+                                   "Played by: <b>%{customdata}</b><br>",
+                     colorbar=dict(tickmode="array", tickvals=[0.25, 0.5, 0.75], ticktext=["Women", "Men", "Both"])
+                     )
+
+    layout_corr = dict(title="Sports played per Gender",
+                       autosize=False,
+                       height=800,
+                       width=800,
+                       yaxis=dict(tickfont=dict(size=9)),
+                       xaxis=dict(tickfont=dict(size=9))
+                       )
+    # -- Step 3 -- Show Figure
+
+    # Show the Figure
+    fig_Gender_Participation = go.Figure(data=data_corr, layout=layout_corr)
+
+    return fig_Gender_Percentage, fig_Gender_Year, fig_Gender_Participation
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

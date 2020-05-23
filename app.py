@@ -74,7 +74,7 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.H2(
+            html.H4(
                 'Filters Menu'
             ),
         ], style={'width': '80%', 'display': 'inline-block', 'vertical-align': 'middle'}),
@@ -149,15 +149,15 @@ app.layout = html.Div([
         html.Div([
             html.Div([
                 dcc.Graph(id='Gender_Percentage')
-            ],style={'width':'25%'}, className='box'),
+            ],style={'width':'25%'}),
             html.Br(),
 
             html.Div([
                 dcc.Graph(id='Gender_Year')
-            ],style={'width':'75%'}, className='box'),
+            ],style={'width':'75%'}),
             html.Br(),
         ],style={'display':'flex'})
-    ]),
+    ],className='box'),
 
     html.Div([
         html.Div([
@@ -165,10 +165,10 @@ app.layout = html.Div([
              'No women participated in Athens in 1896;  Women competed in 1900. Until 2014 not all sports had female or mixed categories (Baseball is the exception)',
         ]),
 
-    html.Div([
-        dcc.Graph(id='Gender_Participation'),
-        ],className='box'),
-    ]),
+        html.Div([
+            dcc.Graph(id='Gender_Participation'),
+        ]),
+    ],className='box'),
     html.Br(),
 ])
 

@@ -151,18 +151,22 @@ app.layout = html.Div([
     Output('Gender_Participation', 'figure')
 ],
     [
-        #Input("country_drop", "value"),
         Input("year_slider", "value"),
+        Input("country_drop", "value"),
     ]
 )
 # -------------------------------------------------------------------------------------------------------------------#
 # -------------------------------------------- Plots Creation -------------------------------------------------------#
 # -------------------------------------------------------------------------------------------------------------------#
 
-def update_graphs(year):
+def update_graphs(year,country):
     # define dataset to Plot
     df_baseline = df[(df['Year'] >= year[0]) & (df['Year'] <= year[1])]
 
+    if  country == []:
+        df_baseline = df_baseline.copy()
+    elif country != []:
+        df_baseline = df_baseline[df_baseline['Country_Name'].isin(country)].copy()
 
     #################################################################
     ######## Plot 1  - Gender Representation Olympic Games ##########

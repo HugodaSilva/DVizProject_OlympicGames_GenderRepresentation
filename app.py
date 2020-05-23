@@ -170,6 +170,19 @@ app.layout = html.Div([
         ]),
     ],className='box'),
     html.Br(),
+
+    html.Div([
+        html.Div([
+            'NOVA IMS | Data Visualisation | Spring Semester 2019-2020'
+            ], style={'text-align': 'center'}),
+        html.Div([
+            'Professors: Pedro Cabral | Nuno Alpalhão'
+        ], style={'text-align': 'center'}),
+        html.Div([
+            'Group: Anabell Gongora M20180349 | Hugo Silva M20190973 | Joana Ribeiro M20190459 | Liliana Nogueira M20190835'
+        ], style={'text-align': 'center'}),
+    ],className='box'),
+
 ])
 
 

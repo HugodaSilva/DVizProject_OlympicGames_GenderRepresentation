@@ -64,9 +64,12 @@ app.layout = html.Div([
             ),
         ],style={'width':'20%','height':'20%','vertical-align': 'middle','horizontal-align': 'middle'}),
         html.Div([ # Div 1.2 - Logo
-            html.H1(
-                'Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'
-            ),
+            html.H1('Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'
+                    ),
+            html.Div('More than 35,000 medals have been awarded at the Olympics since 1896.'
+                     ),
+            html.Div('The information in this visualisation contains every Olympic athlete that has won a medal since the first games.'
+                     ),
         ],style={'width':'85%'}),
     ],style={'display':'flex'}),
 

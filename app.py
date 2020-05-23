@@ -53,8 +53,8 @@ server = app.server
 
 app.layout = html.Div([
 
-    html.Div([
-        html.Div([
+    html.Div([ # Div 1 - Title and Logo
+        html.Div([ # Div 1.1 - Logo
             html.Img(
                 src="assets/Olympic_Rings.png",
                 alt="Olympic Games logo",
@@ -63,7 +63,7 @@ app.layout = html.Div([
                 height="55%",
             ),
         ],style={'width':'20%','height':'20%','vertical-align': 'middle','horizontal-align': 'middle'}),
-        html.Div([
+        html.Div([ # Div 1.2 - Logo
             html.H1(
                 'Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'
             ),
@@ -72,8 +72,8 @@ app.layout = html.Div([
 
     html.Br(),
 
-    html.Div([
-        html.Div([
+    html.Div([ # Div 2 - Filters Menu
+        html.Div([ # Div 2.1 - Title
             html.H4(
                 'Filters Menu'
             ),
@@ -81,17 +81,15 @@ app.layout = html.Div([
 
         html.Br(),
 
-        html.Div([
+        html.Div([ # Div 2.2 - Country Dropdown
             html.Label('Country Choice'),
             dropdown_country,
-
-
         ],style={'width':'50%','display': 'inline-block'}),
 
         html.Br(),
         html.Br(),
 
-        html.Div([
+        html.Div([ # Div 2.3 - Year Slider
             html.Label('Year Slider'),
             html.Div([
                 dcc.RangeSlider(
@@ -139,54 +137,72 @@ app.layout = html.Div([
         ],style={'width':'100%','display': 'inline-block'}),
     ], className='box'),
 
-
-    html.Div([
+    html.Div([  # Div 3 - Big Numbers
         html.Div([
+            html.H6('Number of Countries'),
+            dcc.Graph(id='Number_Countries',style={'vertical-align': 'middle','horizontal-align': 'middle'})
+        ],style={'width':'33%','text-align': 'center'}, className='box'),
+        html.Div([
+            html.H6('Number of Athletes'),
+            dcc.Graph(id='Number_Athletes',style={'vertical-align': 'middle','horizontal-align': 'middle'})
+        ],style={'width':'33%','text-align': 'center'}, className='box'),
+        html.Div([
+            html.H6('Number of Sports'),
+            dcc.Graph(id='Number_Sports',style={'vertical-align': 'middle','horizontal-align': 'middle'})
+        ],style={'width':'33%','text-align': 'center'}, className='box'),
+    ], className='box',style={'display':'flex'}),
+
+
+    html.Div([ # Div 4 - Gender Percentage
+        html.Div([ # Div 4.1 - Title
             html.H4('After more than 100 years, gender equality is still more goal than reality'),
             'Use the Filter Menu to find the gap between men and women Olympic medalists',
         ]),
 
-        html.Div([
-            html.Div([
+        html.Div([ # Div 4.2 - Graphs
+            html.Div([ # Div 4.2.1 - Pie Chart
                 dcc.Graph(id='Gender_Percentage')
             ],style={'width':'25%'}),
             html.Br(),
 
-            html.Div([
+            html.Div([ # Div 4.2.2 - Bar Chart
                 dcc.Graph(id='Gender_Year')
             ],style={'width':'75%'}),
             html.Br(),
         ],style={'display':'flex'})
     ],className='box'),
 
-    html.Div([
-        html.Div([
+    html.Div([ # Div 5 - Gender Participation
+        html.Div([ # Div 5.1 - Title
             html.H4('Women have not always been allowed to participate in the Olympic Games. '),
              'No women participated in Athens in 1896;  Women competed in 1900. Until 2014 not all sports had female or mixed categories (Baseball is the exception)',
         ]),
 
-        html.Div([
+        html.Div([ # Div 5.2 - Heatmap
             dcc.Graph(id='Gender_Participation'),
         ]),
     ],className='box'),
     html.Br(),
 
-    html.Div([
+    html.Div([ # Div 6 - Footer
         html.Div([
             'NOVA IMS | Data Visualisation | Spring Semester 2019-2020'
-            ], style={'text-align': 'center'}),
+            ], style={'text-align': 'center','font-size':'0.8em', 'color':'gray'}),
         html.Div([
             'Professors: Pedro Cabral | Nuno Alpalhão'
-        ], style={'text-align': 'center'}),
+        ], style={'text-align': 'center','font-size':'0.8em', 'color':'gray'}),
         html.Div([
             'Group: Anabell Gongora M20180349 | Hugo Silva M20190973 | Joana Ribeiro M20190459 | Liliana Nogueira M20190835'
-        ], style={'text-align': 'center'}),
+        ], style={'text-align': 'center','font-size':'0.8em', 'color':'gray'}),
     ],className='box'),
 
 ])
 
 
 @app.callback([
+    Output('Number_Countries', 'figure'),
+    Output('Number_Athletes', 'figure'),
+    Output('Number_Sports', 'figure'),
     Output('Gender_Percentage', 'figure'),
     Output('Gender_Year', 'figure'),
     Output('Gender_Participation', 'figure')
@@ -208,6 +224,159 @@ def update_graphs(year,country):
         df_baseline = df_baseline.copy()
     elif country != []:
         df_baseline = df_baseline[df_baseline['Country_Name'].isin(country)].copy()
+
+    #################################################################
+    ####################### Big Numbers ########################
+    #################################################################
+
+    #################################################################
+    # ------------------- Number of Sports -----------------------#
+
+    # -- Step 1 -- Define the data
+    # -- Initial Values -- #
+    N_Country_Total_Init = df['Country_Name'].nunique()
+    N_Country_Gender_Init = pd.pivot_table(df, values='Medal', index=['Country_Name'], columns=['Gender'], aggfunc=len,
+                                            dropna=False)
+    N_Country_Gender_Split_Init = N_Country_Gender_Init.count()
+    N_Country_Gender_Men_Init = N_Country_Gender_Split_Init[0]
+    N_Country_Gender_Women_Init = N_Country_Gender_Split_Init[1]
+
+    # -- Baseline with Filters -- #
+    N_Country_Total_Filter = df_baseline['Country_Name'].nunique()
+    N_Country_Gender_Filter = pd.pivot_table(df_baseline, values='Medal', index=['Country_Name'], columns=['Gender'],
+                                              aggfunc=len,
+                                              dropna=False)
+    N_Country_Gender_Split_Filter = N_Country_Gender_Filter.count()
+    N_Country_Gender_Men_Filter = N_Country_Gender_Split_Filter[0]
+    N_Country_Gender_Women_Filter = N_Country_Gender_Split_Filter[1]
+
+    # -- Step 2 -- Prepare Data to plot
+    data_Country = dict(type='indicator',
+                         mode='number+delta',
+                         value=N_Country_Total_Filter,
+                         delta={'position': "top", 'reference': N_Country_Total_Init, 'relative': True},
+                         domain={'x': [0, 1], 'y': [0.3, 1]},
+                         title=dict(text='Total')
+                         )
+
+    data_Country_men = dict(type='indicator',
+                             mode='number+delta',
+                             value=N_Country_Gender_Men_Filter,
+                             delta={'position': "top", 'reference': N_Country_Gender_Men_Init, 'relative': True},
+                             domain={'x': [0, 0.3], 'y': [0, 0.3]},
+                             title=dict(text="<br><span style='font-size:0.8em;color:gray'>Men</span><br>")
+                             )
+
+    data_Country_women = dict(type='indicator',
+                               mode='number+delta',
+                               value=N_Country_Gender_Women_Filter,
+                               delta={'position': "top", 'reference': N_Country_Gender_Women_Init, 'relative': True},
+                               domain={'x': [0.7, 1], 'y': [0, 0.3]},
+                               title=dict(text="<br><span style='font-size:0.8em;color:gray'>Women</span><br>")
+                               )
+
+    # -- Step 3 -- Show Figure
+    Country_indicator_data = [data_Country, data_Country_men, data_Country_women]
+    Number_Countries = go.Figure(data=Country_indicator_data)
+
+    #################################################################
+    # ------------------- Number of Athletes -----------------------#
+
+    # -- Step 1 -- Define the data
+    # -- Initial Values -- #
+    N_Athletes_Total_Init = df['Athlete'].nunique()
+    N_Athletes_Gender_Init = pd.pivot_table(df, values='Medal', index=['Athlete'], columns=['Gender'], aggfunc=len,
+                                       dropna=False)
+    N_Athletes_Gender_Split_Init = N_Athletes_Gender_Init.count()
+    N_Athletes_Gender_Men_Init = N_Athletes_Gender_Split_Init[0]
+    N_Athletes_Gender_Women_Init = N_Athletes_Gender_Split_Init[1]
+
+    # -- Baseline with Filters -- #
+    N_Athletes_Total_Filter = df_baseline['Athlete'].nunique()
+    N_Athletes_Gender_Filter = pd.pivot_table(df_baseline, values='Medal', index=['Athlete'], columns=['Gender'], aggfunc=len,
+                                       dropna=False)
+    N_Athletes_Gender_Split_Filter = N_Athletes_Gender_Filter.count()
+    N_Athletes_Gender_Men_Filter = N_Athletes_Gender_Split_Filter[0]
+    N_Athletes_Gender_Women_Filter = N_Athletes_Gender_Split_Filter[1]
+
+    # -- Step 2 -- Prepare Data to plot
+    data_athletes = dict(type='indicator',
+                       mode='number+delta',
+                       value=N_Athletes_Total_Filter,
+                       delta={'position': "top", 'reference': N_Athletes_Total_Init,'relative': True},
+                       domain={'x': [0, 1], 'y': [0.3, 1]},
+                       title=dict(text='Total')
+                       )
+
+    data_athletes_men = dict(type='indicator',
+                    mode='number+delta',
+                    value=N_Athletes_Gender_Men_Filter,
+                    delta={'position': "top", 'reference': N_Athletes_Gender_Men_Init,'relative': True},
+                    domain={'x': [0, 0.3], 'y': [0, 0.3]},
+                    title=dict(text="<br><span style='font-size:0.8em;color:gray'>Men</span><br>")
+                    )
+
+    data_athletes_women = dict(type='indicator',
+                      mode='number+delta',
+                      value=N_Athletes_Gender_Women_Filter,
+                      delta={'position': "top", 'reference': N_Athletes_Gender_Women_Init,'relative': True},
+                      domain={'x': [0.7, 1], 'y': [0, 0.3]},
+                      title=dict(text="<br><span style='font-size:0.8em;color:gray'>Women</span><br>")
+                      )
+
+    # -- Step 3 -- Show Figure
+    athletes_indicator_data = [data_athletes, data_athletes_men, data_athletes_women]
+    Number_Athletes = go.Figure(data=athletes_indicator_data)
+
+    #################################################################
+    # ------------------- Number of Sports -----------------------#
+
+    # -- Step 1 -- Define the data
+    # -- Initial Values -- #
+    N_Sport_Total_Init = df['Sport'].nunique()
+    N_Sport_Gender_Init = pd.pivot_table(df, values='Medal', index=['Sport'], columns=['Gender'], aggfunc=len,
+                                            dropna=False)
+    N_Sport_Gender_Split_Init = N_Sport_Gender_Init.count()
+    N_Sport_Gender_Men_Init = N_Sport_Gender_Split_Init[0]
+    N_Sport_Gender_Women_Init = N_Sport_Gender_Split_Init[1]
+
+    # -- Baseline with Filters -- #
+    N_Sport_Total_Filter = df_baseline['Sport'].nunique()
+    N_Sport_Gender_Filter = pd.pivot_table(df_baseline, values='Medal', index=['Sport'], columns=['Gender'],
+                                              aggfunc=len,
+                                              dropna=False)
+    N_Sport_Gender_Split_Filter = N_Sport_Gender_Filter.count()
+    N_Sport_Gender_Men_Filter = N_Sport_Gender_Split_Filter[0]
+    N_Sport_Gender_Women_Filter = N_Sport_Gender_Split_Filter[1]
+
+    # -- Step 2 -- Prepare Data to plot
+    data_Sport = dict(type='indicator',
+                         mode='number+delta',
+                         value=N_Sport_Total_Filter,
+                         delta={'position': "top", 'reference': N_Sport_Total_Init, 'relative': True},
+                         domain={'x': [0, 1], 'y': [0.3, 1]},
+                         title=dict(text='Total')
+                         )
+
+    data_Sport_men = dict(type='indicator',
+                             mode='number+delta',
+                             value=N_Sport_Gender_Men_Filter,
+                             delta={'position': "top", 'reference': N_Sport_Gender_Men_Init, 'relative': True},
+                             domain={'x': [0, 0.3], 'y': [0, 0.3]},
+                             title=dict(text="<br><span style='font-size:0.8em;color:gray'>Men</span><br>")
+                             )
+
+    data_Sport_women = dict(type='indicator',
+                               mode='number+delta',
+                               value=N_Sport_Gender_Women_Filter,
+                               delta={'position': "top", 'reference': N_Sport_Gender_Women_Init, 'relative': True},
+                               domain={'x': [0.7, 1], 'y': [0, 0.3]},
+                               title=dict(text="<br><span style='font-size:0.8em;color:gray'>Women</span><br>")
+                               )
+
+    # -- Step 3 -- Show Figure
+    Sport_indicator_data = [data_Sport, data_Sport_men, data_Sport_women]
+    Number_Sports = go.Figure(data=Sport_indicator_data)
 
     #################################################################
     ######## Plot 1  - Gender Representation Olympic Games ##########
@@ -346,7 +515,7 @@ def update_graphs(year,country):
     # Show the Figure
     fig_Gender_Participation = go.Figure(data=data_corr, layout=layout_corr)
 
-    return fig_Gender_Percentage, fig_Gender_Year, fig_Gender_Participation
+    return Number_Countries, Number_Athletes, Number_Sports, fig_Gender_Percentage, fig_Gender_Year, fig_Gender_Participation
 
 
 if __name__ == '__main__':

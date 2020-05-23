@@ -54,93 +54,121 @@ server = app.server
 app.layout = html.Div([
 
     html.Div([
-        html.Div(
+        html.Div([
             html.Img(
                 src="assets/Olympic_Rings.png",
-                alt="Olympic Ganmes logo",
+                alt="Olympic Games logo",
                 id="logo",
-                width="20%",
-                height="20%",
+                width="55%",
+                height="55%",
             ),
-        ),
-        html.Div(
-            html.H1('Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'),
-        ),
+        ],style={'width':'20%','height':'20%','vertical-align': 'middle','horizontal-align': 'middle'}),
+        html.Div([
+            html.H1(
+                'Mind the gap: the underrepresentation of female athletes in Olympic Games (1896 to 2014)'
+            ),
+        ],style={'width':'85%'}),
+    ],style={'display':'flex'}),
+
+    html.Br(),
+
+    html.Div([
+        html.Div([
+            html.H2(
+                'Filters Menu'
+            ),
+        ], style={'width': '80%', 'display': 'inline-block', 'vertical-align': 'middle'}),
+
+        html.Br(),
+
+        html.Div([
+            html.Label('Country Choice'),
+            dropdown_country,
+
+
+        ],style={'width':'50%','display': 'inline-block'}),
+
+        html.Br(),
+        html.Br(),
+
+        html.Div([
+            html.Label('Year Slider'),
+            html.Div([
+                dcc.RangeSlider(
+                    id='year_slider',
+                    min=1896,
+                    max=2014,
+                    value=[1896, 2014],
+                    marks={'1896' : '1896',
+                            '1900' : '1900',
+                            '1904' : '1904',
+                            '1908' : '1908',
+                            '1912' : '1912',
+                            '1920' : '1920',
+                            '1924' : '1924',
+                            '1928' : '1928',
+                            '1932' : '1932',
+                            '1936' : '1936',
+                            '1948' : '1948',
+                            '1952' : '1952',
+                            '1956' : '1956',
+                            '1960' : '1960',
+                            '1964' : '1964',
+                            '1968' : '1968',
+                            '1972' : '1972',
+                            '1976' : '1976',
+                            '1980' : '1980',
+                            '1984' : '1984',
+                            '1988' : '1988',
+                            '1992' : '1992',
+                            '1994' : '1994',
+                            '1996' : '1996',
+                            '1998' : '1998',
+                            '2000' : '2000',
+                            '2002' : '2002',
+                            '2004' : '2004',
+                            '2006' : '2006',
+                            '2008' : '2008',
+                            '2010' : '2010',
+                            '2012' : '2012',
+                            '2014' : '2014',},
+                    step=None
+                )
+            ], id='slider'),
+            html.Br(),
+        ],style={'width':'100%','display': 'inline-block'}),
+    ], className='box'),
+
+
+    html.Div([
+        html.Div([
+            html.H4('After more than 100 years, gender equality is still more goal than reality'),
+            'Use the Filter Menu to find the gap between men and women Olympic medalists',
+        ]),
+
+        html.Div([
+            html.Div([
+                dcc.Graph(id='Gender_Percentage')
+            ],style={'width':'25%'}, className='box'),
+            html.Br(),
+
+            html.Div([
+                dcc.Graph(id='Gender_Year')
+            ],style={'width':'75%'}, className='box'),
+            html.Br(),
+        ],style={'display':'flex'})
     ]),
 
-    html.Br(),
-
-    html.Label('Country Choice'),
-    dropdown_country,
-
-    html.Br(),
-
-    html.Label('Year Slider'),
     html.Div([
-        dcc.RangeSlider(
-            id='year_slider',
-            min=1896,
-            max=2014,
-            value=[1896, 2014],
-            marks={'1896' : '1896',
-                    '1900' : '1900',
-                    '1904' : '1904',
-                    '1908' : '1908',
-                    '1912' : '1912',
-                    '1920' : '1920',
-                    '1924' : '1924',
-                    '1928' : '1928',
-                    '1932' : '1932',
-                    '1936' : '1936',
-                    '1948' : '1948',
-                    '1952' : '1952',
-                    '1956' : '1956',
-                    '1960' : '1960',
-                    '1964' : '1964',
-                    '1968' : '1968',
-                    '1972' : '1972',
-                    '1976' : '1976',
-                    '1980' : '1980',
-                    '1984' : '1984',
-                    '1988' : '1988',
-                    '1992' : '1992',
-                    '1994' : '1994',
-                    '1996' : '1996',
-                    '1998' : '1998',
-                    '2000' : '2000',
-                    '2002' : '2002',
-                    '2004' : '2004',
-                    '2006' : '2006',
-                    '2008' : '2008',
-                    '2010' : '2010',
-                    '2012' : '2012',
-                    '2014' : '2014',},
-            step=4
-        )
-    ], id='slider'
-    ),
+        html.Div([
+            html.H4('Women have not always been allowed to participate in the Olympic Games. '),
+             'No women participated in Athens in 1896;  Women competed in 1900. Until 2014 not all sports had female or mixed categories (Baseball is the exception)',
+        ]),
 
-    html.Br(),
-
-    html.Div('We can write some text here to explain the purpose of the graph'),
-    dcc.Graph(
-        id='Gender_Percentage'
-    ),
-
-    html.Br(),
-
-    html.Div('We can write some text here to explain the purpose of the graph'),
-    dcc.Graph(
-        id='Gender_Year'
-    ),
-
-    html.Br(),
-
-    html.Div('We can write some text here to explain the purpose of the graph'),
-    dcc.Graph(
-        id='Gender_Participation'
-    ),
-
+    html.Div([
+        dcc.Graph(id='Gender_Participation'),
+        ],className='box'),
+    ]),
     html.Br(),
 ])
 
@@ -290,7 +318,7 @@ def update_graphs(year,country):
                      hovertemplate="Column: <b>%{x}</b><br>" +
                                    "Line: <b>%{y}</b><br>" +
                                    "Played by: <b>%{customdata}</b><br>",
-                     colorbar=dict(tickmode="array", tickvals=[0.25, 0.5, 0.75], ticktext=["Women", "Men", "Both"])
+                     colorbar=dict(tickmode="array", tickvals=[0.25, 0.5, 0.75], ticktext=["Women", "Men", "Mixed"])
                      )
 
     layout_corr = dict(title="Sports played per Gender",

@@ -232,7 +232,7 @@ html.Div([ # DIV A - LEFT COLUMN
                     dcc.Loading(dcc.Graph(id='Gender_Year'))
                 ],style={'width':'75%'}),# End Div B3.2.2
                 html.Br(),
-            ],style={'display':'flex'}) # End Div B3.1
+            ],style={'display':'flex'}) # End Div B3.2
         ],className='box'), # End Div B3
 
         html.Div([ # Div B4 - Gender Participation
@@ -263,6 +263,11 @@ html.Div([ # DIV A - LEFT COLUMN
 ], style={'display':'flex'})
 
 
+
+# -------------------------------------------------------------------------------------------------------------------#
+# -------------------------------------------- Plots Creation -------------------------------------------------------#
+# -------------------------------------------------------------------------------------------------------------------#
+
 @app.callback([
     Output('N_Country_Total_Filter','children'),
     Output('N_Country_Gender_Men_Filter','children'),
@@ -283,12 +288,13 @@ html.Div([ # DIV A - LEFT COLUMN
     ]
 )
 
-# -------------------------------------------------------------------------------------------------------------------#
-# -------------------------------------------- Plots Creation -------------------------------------------------------#
-# -------------------------------------------------------------------------------------------------------------------#
-
 def update_graphs(year,country):
-    # define dataset to Plot
+
+# ___________________________________________________________________________________________________________________#
+#                                     Filter Data acording to the user inputs
+# ___________________________________________________________________________________________________________________#
+
+    # -- Step 1 - Filter Dataframe
     df_baseline = df[(df['Year'] >= year[0]) & (df['Year'] <= year[1])]
 
     if  country == []:
@@ -296,14 +302,15 @@ def update_graphs(year,country):
     elif country != []:
         df_baseline = df_baseline[df_baseline['Country_Name'].isin(country)].copy()
 
-    #################################################################
-    ####################### Big Numbers ########################
-    #################################################################
+# ___________________________________________________________________________________________________________________#
+#                                               Define the Graphs
+# ___________________________________________________________________________________________________________________#
 
-    #################################################################
-    # ------------------- Number of Sports -----------------------#
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+#                                   Indicators 1  - Number of Countries
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
 
-    # -- Baseline with Filters -- #
+    # -- Step 2 - Prepare Data to Plot
     N_Country_Total_Filter = df_baseline['Country_Name'].nunique()
     N_Country_Gender_Filter = pd.pivot_table(df_baseline, values='Medal', index=['Country_Name'], columns=['Gender'],
                                               aggfunc=len,
@@ -324,9 +331,11 @@ def update_graphs(year,country):
 
 
 
-    #################################################################
-    # ------------------- Number of Athletes -----------------------#
-    # -- Baseline with Filters -- #
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+#                                   Indicators 2  - Number of Countries
+#|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+
+    # -- Step 2 - Prepare Data to Plot
     N_Athletes_Total_Filter = df_baseline['Athlete'].nunique()
     N_Athletes_Gender_Filter = pd.pivot_table(df_baseline, values='Medal', index=['Athlete'], columns=['Gender'],
                                               aggfunc=len,
@@ -346,9 +355,12 @@ def update_graphs(year,country):
         N_Athletes_Gender_Women_Filter = 0
 
 
-    #################################################################
-    # ------------------- Number of Sports -----------------------#
 
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+#                                   Indicators 3  - Number of Sports
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+
+    # -- Step 2 - Prepare Data to Plot
     N_Sports_Total_Filter = df_baseline['Sport'].nunique()
     N_Sports_Gender_Filter = pd.pivot_table(df_baseline, values='Medal', index=['Sport'], columns=['Gender'],
                                               aggfunc=len,
@@ -368,16 +380,17 @@ def update_graphs(year,country):
         N_Sports_Gender_Women_Filter = 0
 
 
-    #################################################################
-    ######## Plot 1  - Gender Representation Olympic Games ##########
-    #################################################################
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+#                                        Plot 1  - Gender Representation Olympic Games
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+
+    # -- Step 2 - Prepare Data to Plot
 
     # Define the labels
     label_Gender = df_baseline["Gender"].value_counts().keys().tolist()
     # Define the values
     value_Gender = df_baseline["Gender"].value_counts().values.tolist()
 
-    # Define the data to plot
     Error_Message = 0
     data_Gender = dict(type='pie', labels=label_Gender, values=value_Gender, marker_colors=['#87CEFA', '#FFC0CB'],
                        hole=0.60)
@@ -400,17 +413,18 @@ def update_graphs(year,country):
                                           ]
                              )
 
-    # Show Figure
+    # -- Step 3 - Plot the Figure
     fig_Gender_Percentage = go.Figure(data=[data_Gender], layout=layout_Gender)
 
-    #################################################################
-    ########## Plot 2  - Gender Representation per Year #############
-    #################################################################
 
-    # -- Step 1 -- Define the data
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+#                                        Plot 2  - Gender Representation per Year
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+
+    # -- Step 2 - Prepare Data to Plot
+
     df_GenderPerYear = pd.pivot_table(df_baseline, values="Athlete", index=["Year"], columns=["Gender"], aggfunc=len)
 
-    # -- Step 2 -- Prepare Data to plot
     Error_Message = 0
     if len(df_GenderPerYear.columns) == 2:
         data_Men = (dict(type='bar',
@@ -492,17 +506,18 @@ def update_graphs(year,country):
                                        ]
                           )
 
-    # -- Step 3 -- Show Figure
+    # -- Step 3 - Plot the Figure
 
-    # Show the Figure
     fig_Gender_Year = go.Figure(data=data_bar, layout=layout_bar)
 
-    #################################################################
-    ###### Plot 3  - Gender Participantion per Sport per Year #######
-    #################################################################
 
-    # -- Step 1 -- Define the data
-    # - Step 1.1 - Women data
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+#                                       Plot 3  - Gender Participation per Sport per Year
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+
+    # -- Step 2 - Prepare Data to Plot
+
+    # - Step 2.1 - Women data
     df_Plot_Woman = pd.pivot_table(df[df['Gender'] == "Women"], values='Medal', index=['Year'], columns=['Sport'],
                                    aggfunc=len, dropna=False)
     df_Plot_Woman[df_Plot_Woman > 0] = 2
@@ -510,33 +525,32 @@ def update_graphs(year,country):
     df_Plot_Men = pd.pivot_table(df[df['Gender'] == "Men"], values='Medal', index=['Year'], columns=['Sport'],
                                  aggfunc=len)
 
-    # - Step 1.2 - Men data
+    # - Step 2.2 - Men data
     df_Plot_Men[df_Plot_Men > 0] = 3
     df_Plot_Men[np.isnan(df_Plot_Men)] = 1
 
-    # - Step 1.3 - Multipli Men and Women data
+    # - Step 2.3 - Multipli Men and Women data
     df_Sport_Year = df_Plot_Men * df_Plot_Woman
 
-    # - Step 1.4 - Check Missing Values
+    # - Step 2.4 - Check Missing Values
     df_Sport_Year[np.isnan(df_Sport_Year)] = df_Plot_Men
     df_Sport_Year[np.isnan(df_Sport_Year)] = df_Plot_Woman
     df_Sport_Year[df_Sport_Year == 1] = 0
 
-    # - Step 1.5 - Set the scale
+    # - Step 2.5 - Set the scale
     df_Sport_Year.replace(0, np.nan, inplace=True)
     df_Sport_Year.replace(6, 1, inplace=True)
     df_Sport_Year.replace(3, 0.5, inplace=True)
     df_Sport_Year.replace(2, 0.25, inplace=True)
     df_Plot = df_Sport_Year.T
 
-    # - Step 1.6 - Change data for the hover
+    # - Step 2.6 - Change data for the hover
     df_Sport_Year_Name = df_Sport_Year.T
     df_Sport_Year_Name.replace(np.nan, "None", inplace=True)
     df_Sport_Year_Name.replace(1, "Both", inplace=True)
     df_Sport_Year_Name.replace(0.5, "Men", inplace=True)
     df_Sport_Year_Name.replace(0.25, "Women", inplace=True)
 
-    # -- Step 2 -- Prepare Data to plot
 
     # Define the Values of the Heatmap
     y_corr = df_Plot.index
@@ -563,16 +577,28 @@ def update_graphs(year,country):
                        height=800,
                        width=800,
                        yaxis=dict(tickfont=dict(size=9)),
-                       xaxis=dict(tickfont=dict(size=9))
+                       xaxis=dict(tickfont=dict(size=9)),
+                       annotations= [dict(text='Softball was the only Sport played exclusively by Women since 1996 until 2012',
+                            x = '1996',
+                            y = 'Softball',
+                            bordercolor="#FFC0CB",
+                            borderwidth=1,
+                            borderpad=4,
+                            bgcolor="#f9f9f9",
+                            opacity=0.8,
+                            font=dict(size=6))
+                         ]
                        )
-    # -- Step 3 -- Show Figure
 
-    # Show the Figure
+
+    # -- Step 3 - Plot the Figure
     fig_Gender_Participation = go.Figure(data=data_corr, layout=layout_corr)
 
-    return N_Country_Total_Filter,N_Country_Gender_Men_Filter,N_Country_Gender_Women_Filter, \
-           N_Athletes_Total_Filter,N_Athletes_Gender_Men_Filter,N_Athletes_Gender_Women_Filter,\
-           N_Sports_Total_Filter,N_Sports_Gender_Men_Filter,N_Sports_Gender_Women_Filter,\
+
+
+    return N_Country_Total_Filter, N_Country_Gender_Men_Filter, N_Country_Gender_Women_Filter, \
+           N_Athletes_Total_Filter, N_Athletes_Gender_Men_Filter, N_Athletes_Gender_Women_Filter, \
+           N_Sports_Total_Filter, N_Sports_Gender_Men_Filter, N_Sports_Gender_Women_Filter, \
            fig_Gender_Percentage, fig_Gender_Year, fig_Gender_Participation
 
 

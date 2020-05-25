@@ -566,8 +566,8 @@ def update_graphs(year,country):
                      name='Gender Representation',
                      colorscale=[[0, '#FFC0CB'], [0.33, '#FFC0CB'], [0.33, '#87CEFA'], [0.66, '#87CEFA'],
                                  [0.66, '#c3e4a1'], [1, '#c3e4a1']],
-                     hovertemplate="Column: <b>%{x}</b><br>" +
-                                   "Line: <b>%{y}</b><br>" +
+                     hovertemplate="Year: <b>%{x}</b><br>" +
+                                   "Sport: <b>%{y}</b><br>" +
                                    "Played by: <b>%{customdata}</b><br>",
                      colorbar=dict(tickmode="array", tickvals=[0.25, 0.5, 0.75], ticktext=["Women", "Men", "Mixed"])
                      )

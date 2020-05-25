@@ -256,7 +256,7 @@ html.Div([ # DIV A - LEFT COLUMN
             html.Div([ # Div B4.1 - Title
                 html.H3('The changing path'),
                 html.H5('Women have not always been allowed to participate in the Olympic Games. '),
-                 'No women participated in Athens in 1896;  Women competed in 1900. Until 2014 not all sports had female or mixed categories (Baseball is the exception)',
+                 'No women participated in Athens in 1896;  Women competed in 1900. Until 2010 not all sports had female or mixed categories',
             ]),# End Div B4.1
 
             html.Div([ # Div B4.2 -Stacked 100%

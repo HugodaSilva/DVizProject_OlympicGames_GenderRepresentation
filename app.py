@@ -569,7 +569,7 @@ def update_graphs(year,country):
                      hovertemplate="Year: <b>%{x}</b><br>" +
                                    "Sport: <b>%{y}</b><br>" +
                                    "Played by: <b>%{customdata}</b><br>",
-                     colorbar=dict(tickmode="array", tickvals=[0.25, 0.5, 0.75], ticktext=["Women", "Men", "Mixed"])
+                     colorbar=dict(tickmode="array", tickvals=[0.25, 0.5, 0.75], ticktext=["Women", "Men", "Both"])
                      )
 
     layout_corr = dict(title="Sports played per Gender",

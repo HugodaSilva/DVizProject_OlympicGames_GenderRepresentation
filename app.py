@@ -91,7 +91,12 @@ html.Div([ # DIV A - LEFT COLUMN
                         dcc.Loading(html.Div([html.H6("...")], id="N_Country_Gender_Women_Filter",
                                              style={"font-size": 16, "font-weight": "bold", 'color': '#FFC0CB'})),
                     ], style={'width': '50%'}),
-                ], style={'display': 'flex'})
+                ], style={'display': 'flex'}),
+                    html.Br(),
+                    html.Div([
+                        'Note: This card represents the number of countries that have Olympic medalists. '
+                        'It also represents the number of countries split by gender.'
+                    ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.1
 
@@ -113,7 +118,12 @@ html.Div([ # DIV A - LEFT COLUMN
                         dcc.Loading(html.Div([html.H6("...")], id="N_Athletes_Gender_Women_Filter",
                                              style={"font-size": 16, "font-weight": "bold", 'color': '#FFC0CB'})),
                     ], style={'width': '50%'}),
-                ], style={'display': 'flex'})
+                ], style={'display': 'flex'}),
+                html.Br(),
+                html.Div([
+                    'Note: This card represents the number of Olympic medalists. '
+                    'It also represents the number of Olympic medalists split by gender.'
+                ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.2
 
@@ -135,7 +145,12 @@ html.Div([ # DIV A - LEFT COLUMN
                         dcc.Loading(html.Div([html.H6("...")], id="N_Sports_Gender_Women_Filter",
                                              style={"font-size": 16, "font-weight": "bold", 'color': '#FFC0CB'})),
                     ], style={'width': '50%'}),
-                ], style={'display': 'flex'})
+                ], style={'display': 'flex'}),
+                html.Br(),
+                html.Div([
+                    'Note: This card represents the number of sports that have Olympic medalists. '
+                    'It also represents the number of sports split by gender.'
+                ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.3
         ],style={'display':'flex', 'flex-direction': 'column'}), # End Div A2
@@ -218,32 +233,39 @@ html.Div([ # DIV A - LEFT COLUMN
 
         html.Div([ # Div B3 - Gender Percentage
             html.Div([ # Div B3.1 - Title
-                html.H4('After more than 100 years, gender equality is still more goal than reality'),
-                'Use the Filter Menu to find the gap between men and women Olympic medalists',
+                html.H3('The gap'),
+                html.H5('After more than 100 years, gender equality is still more goal than reality in the Olympic Games'),
+                'Use the Filter Menu and hover over the graphs to find the gap between men and women Olympic medalists',
             ]),# End Div B3.1
 
-            html.Div([ # Div B3.2 - Graphs
-                html.Div([ # Div B3.2.1 - Pie Chart
+            html.Div([  # Div B3.2 - Graphs
+                html.Div([  # Div B3.2.1 - Pie Chart
                     dcc.Loading(dcc.Graph(id='Gender_Percentage'))
-                ],style={'width':'25%'}),# End Div B3.2.1
+                ], style={'width': '30%'}),  # End Div B3.2.1
                 html.Br(),
 
-                html.Div([ # Div B3.2.2 - Bar Chart
+                html.Div([  # Div B3.2.2 - Bar Chart
                     dcc.Loading(dcc.Graph(id='Gender_Year'))
-                ],style={'width':'75%'}),# End Div B3.2.2
+                ], style={'width': '70%'}),  # End Div B3.2.2
                 html.Br(),
-            ],style={'display':'flex'}) # End Div B3.2
-        ],className='box'), # End Div B3
+            ], style={'display': 'flex'})  # End Div B3.2
+        ], className='box'),  # End Div B3
+
 
         html.Div([ # Div B4 - Gender Participation
             html.Div([ # Div B4.1 - Title
-                html.H4('Women have not always been allowed to participate in the Olympic Games. '),
+                html.H3('The changing path'),
+                html.H5('Women have not always been allowed to participate in the Olympic Games. '),
                  'No women participated in Athens in 1896;  Women competed in 1900. Until 2014 not all sports had female or mixed categories (Baseball is the exception)',
             ]),# End Div B4.1
 
-            html.Div([ # Div B4.2 - Heatmap
+            html.Div([ # Div B4.2 -Stacked 100%
+                dcc.Graph(id='Gender_Swap'),
+            ],style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}),# End Div B4.2
+
+            html.Div([  # Div B4.3 - Heatmap
                 dcc.Graph(id='Gender_Participation'),
-            ]),# End Div B4.2
+            ],style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}),  # End Div B4.3
         ],className='box'), # End Div B4
         html.Br(),
 
@@ -280,7 +302,8 @@ html.Div([ # DIV A - LEFT COLUMN
     Output('N_Sports_Gender_Women_Filter', 'children'),
     Output('Gender_Percentage', 'figure'),
     Output('Gender_Year', 'figure'),
-    Output('Gender_Participation', 'figure')
+    Output('Gender_Participation', 'figure'),
+    Output('Gender_Swap', 'figure')
 ],
     [
         Input("year_slider", "value"),
@@ -409,7 +432,7 @@ def update_graphs(year,country):
                                                xref="paper",
                                                yref="paper",
                                                showarrow=False,
-                                               font=dict(size=28))
+                                               font=dict(size=12))
                                           ]
                              )
 
@@ -502,7 +525,7 @@ def update_graphs(year,country):
                                             xref="paper",
                                             yref="paper",
                                             showarrow=False,
-                                            font=dict(size=28))
+                                            font=dict(size=12))
                                        ]
                           )
 
@@ -578,7 +601,7 @@ def update_graphs(year,country):
                        width=800,
                        yaxis=dict(tickfont=dict(size=9)),
                        xaxis=dict(tickfont=dict(size=9)),
-                       annotations= [dict(text='Softball was the only Sport played exclusively by Women since 1996 until 2012',
+                       annotations= [dict(text='Softball was the only Sport played exclusively by Women since 1996 until 2014',
                             x = '1996',
                             y = 'Softball',
                             bordercolor="#FFC0CB",
@@ -595,11 +618,79 @@ def update_graphs(year,country):
     fig_Gender_Participation = go.Figure(data=data_corr, layout=layout_corr)
 
 
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+#                                                Plot 4  - Gender Swap
+# |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||#
+
+    # -- Step 2 - Prepare Data to Plot
+    df_GenderParticipationColumns = df_Sport_Year_Name.stack().reset_index().rename(columns={'level_0':'Sport','level_1':'Year', 0:'PlayedBy'})
+    df_GenderParticipationColumns.drop(columns=['Sport'])
+    df_GenderPlayedBy = pd.pivot_table(df_GenderParticipationColumns, index=['Year'], columns=['PlayedBy'], aggfunc=len)
+    df_GenderPlayedBy.columns = [col[1] for col in df_GenderPlayedBy.columns]
+    df_GenderPlayedBy=df_GenderPlayedBy.drop(columns=['None'], axis=1)
+    df_GenderPlayedBy.replace(np.nan,0, inplace=True)
+
+    df_GenderPlayedBy['Total'] = df_GenderPlayedBy.sum(axis=1)
+    df_GenderPlayedBy['Men_Percentage'] = round(100*df_GenderPlayedBy['Men']/df_GenderPlayedBy['Total'],2)
+    df_GenderPlayedBy['Women_Percentage'] = round(100*df_GenderPlayedBy['Women']/df_GenderPlayedBy['Total'],2)
+    df_GenderPlayedBy['Both_Percentage'] = round(100*df_GenderPlayedBy['Both']/df_GenderPlayedBy['Total'],2)
+
+    data_Men = (dict(type='bar',
+                         x=df_GenderPlayedBy.index,
+                         y=df_GenderPlayedBy['Men_Percentage'],
+                         text=df_GenderPlayedBy['Men_Percentage'],
+                         textposition='auto',
+                         name="Men",
+                         marker_color="#87CEFA",
+                         hovertemplate="Year: <b>%{x}</b><br>" +
+                                      "Gender: <b>Men</b><br>" +
+                                      "Percentage of Participation: <b>%{y}%</b><br>",
+                         )
+                    )
+
+    data_Women = (dict(type='bar',
+                       x=df_GenderPlayedBy.index,
+                       y=df_GenderPlayedBy['Women_Percentage'],
+                       text=df_GenderPlayedBy['Women_Percentage'],
+                       textposition='auto',
+                       name="Women",
+                       marker_color="#FFC0CB",
+                       hovertemplate="Year: <b>%{x}</b><br>" +
+                                     "Gender: <b>Women</b><br>" +
+                                     "Percentage of Participation: <b>%{y}%</b><br>",
+                       )
+                  )
+
+    data_Both = (dict(type='bar',
+                       x=df_GenderPlayedBy.index,
+                       y=df_GenderPlayedBy['Both_Percentage'],
+                       text=df_GenderPlayedBy['Both_Percentage'],
+                       textposition='auto',
+                       name="Both",
+                       marker_color="#c3e4a1",
+                       hovertemplate="Year: <b>%{x}</b><br>" +
+                                     "Gender: <b>Both</b><br>" +
+                                     "Percentage of Participation: <b>%{y}%</b><br>",
+                       )
+                  )
+
+
+    data_bar = [data_Men, data_Women, data_Both]
+
+    layout_bar = dict(barmode = 'stack',
+                     title=dict(text='Percentage of Participation per Gender'),
+                     yaxis=dict(title='Percentage of Participation [%]'),
+                     xaxis=dict(title="Year"),
+                     )
+
+    # -- Step 3 - Plot the Figure
+    fig_Gender_Swap = go.Figure(data=data_bar, layout=layout_bar)
+
 
     return N_Country_Total_Filter, N_Country_Gender_Men_Filter, N_Country_Gender_Women_Filter, \
            N_Athletes_Total_Filter, N_Athletes_Gender_Men_Filter, N_Athletes_Gender_Women_Filter, \
            N_Sports_Total_Filter, N_Sports_Gender_Men_Filter, N_Sports_Gender_Women_Filter, \
-           fig_Gender_Percentage, fig_Gender_Year, fig_Gender_Participation
+           fig_Gender_Percentage, fig_Gender_Year, fig_Gender_Participation, fig_Gender_Swap
 
 
 if __name__ == '__main__':

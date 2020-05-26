@@ -167,13 +167,13 @@ html.Div([ # DIV A - LEFT COLUMN
 
         html.Div([ # Div B2 - Filters Menu
             html.Div([ # Div B2.1 - Title
-                html.H4('Filters Menu'),
+                html.H4('Select Country and/or Year below for more detailed information'),
             ], style={'width': '80%', 'display': 'inline-block', 'vertical-align': 'middle'}), # End Div B2.1
 
             html.Br(),
 
             html.Div([ # Div B2.2 - Country Dropdown
-                html.Label('Country Choice'),
+                html.Label('Country'),
                 dropdown_country,
             ],style={'width':'50%','display': 'inline-block'}),# End Div B2.2
 
@@ -181,7 +181,7 @@ html.Div([ # DIV A - LEFT COLUMN
             html.Br(),
 
             html.Div([ # Div B2.3 - Year Slider
-                html.Label('Year Slider'),
+                html.Label('Year'),
                 html.Div([
                     dcc.RangeSlider(
                         id='year_slider',

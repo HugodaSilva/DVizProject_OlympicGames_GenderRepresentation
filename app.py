@@ -162,7 +162,7 @@ html.Div([ # DIV A - LEFT COLUMN
                 html.H1('Do the Olympic Games have a gender gap?'),
             ], style={'text-align': 'center', 'color':'#4c8bf5'}), # End Div B1.1
             html.Div([ # Div B1.2 - SubTitle
-                html.H3('Using Olympic Medals to understand the underrepresentation of female athletes (1896 to 2014)'),
+                html.H3('Olympic Medals as a medium to understand the underrepresentation of female athletes in the Olympics (1896 to 2014)'),
             ], style={'text-align': 'center', 'color':'#4c8bf5'}), # End Div B1.2
         ],), # End Div B1
 
@@ -233,7 +233,11 @@ html.Div([ # DIV A - LEFT COLUMN
         html.Div([ # Div B3 - Gender Percentage
             html.Div([ # Div B3.1 - Title
                 html.H3('The gap'),
-                html.H5('After more than 100 years, gender equality is still more goal than reality in the Olympic Games'),
+                html.H5('After more than 100 years, gender equality is still not a reality in the Olympic Games',
+                       'There were no women athletes at the first modern Olympic Games.'
+                       'More than 100 years later, women's participation in the Olympics has grown,'
+                       'but across the Olympic movement, the gender gap still exists.),
+         
                 'Use the Filter Menu and hover over the graphs to find the gap between men and women Olympic medalists',
             ]),# End Div B3.1
 

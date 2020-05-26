@@ -148,7 +148,6 @@ html.Div([ # DIV A - LEFT COLUMN
                 html.Br(),
                 html.Div([
                     'Olympic medalists by Sport & split by Gender.'
-                  
                 ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.3
@@ -233,8 +232,10 @@ html.Div([ # DIV A - LEFT COLUMN
         html.Div([ # Div B3 - Gender Percentage
             html.Div([ # Div B3.1 - Title
                 html.H3('The gap'),
-                html.H5('After more than 100 years, gender equality is still not a reality in the Olympic Games.'),
-                       'Use the Filter Menu and hover over the graphs to find the gap between men and women Olympic medalists',
+                html.H5('After more than 100 years, gender equality is still not a reality in the Olympic Games.',
+                        'There were no women athlets in the first modern Olympic Games.'
+                        'More than 100 years later, their participation has grown, but across the Olympic mouvement the gender gap still exists.'),
+                        'Use the Filter Menu and hover over the graphs to find the gap between men and women Olympic medalists',
             ]),# End Div B3.1
 
             html.Div([  # Div B3.2 - Graphs

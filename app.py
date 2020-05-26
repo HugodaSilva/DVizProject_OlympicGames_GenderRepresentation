@@ -147,7 +147,7 @@ html.Div([ # DIV A - LEFT COLUMN
                 ], style={'display': 'flex'}),
                 html.Br(),
                 html.Div([
-                    'Olympic medalists by Sport & split by Gender.'
+                    'Number of Sports with Olympic medalists split by Gender.'
                 ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.3

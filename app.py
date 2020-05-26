@@ -94,8 +94,8 @@ html.Div([ # DIV A - LEFT COLUMN
                 ], style={'display': 'flex'}),
                     html.Br(),
                     html.Div([
-                        'Note: This card represents the number of countries that have Olympic medalists. '
-                        'It also represents the number of countries split by gender.'
+                        'Number of countries with Olympic medalists split by gender. '
+                    
                     ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.1
@@ -121,8 +121,7 @@ html.Div([ # DIV A - LEFT COLUMN
                 ], style={'display': 'flex'}),
                 html.Br(),
                 html.Div([
-                    'Note: This card represents the number of Olympic medalists. '
-                    'It also represents the number of Olympic medalists split by gender.'
+                    'Number of Olympic medalists & Olympic medalists split by gender. '                  
                 ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.2
@@ -148,8 +147,8 @@ html.Div([ # DIV A - LEFT COLUMN
                 ], style={'display': 'flex'}),
                 html.Br(),
                 html.Div([
-                    'Note: This card represents the number of sports that have Olympic medalists. '
-                    'It also represents the number of sports split by gender.'
+                    'Olympic medalists by Sport & split by Gender . '
+                  
                 ], style={'text-align': 'left', 'font-size': '0.5em', 'color': 'gray'}),
             ], className='box',
                 style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}), # End Div A2.3
@@ -160,10 +159,10 @@ html.Div([ # DIV A - LEFT COLUMN
     html.Div([ # DIV B - RIGHT COLUMN
         html.Div([  # Div B1 - Title and SubTitle
             html.Div([ # Div B1.1 - Title
-                html.H1('Mind the gap'),
+                html.H1('Do the Olympic Games have a gender gap?'),
             ], style={'text-align': 'center', 'color':'#4c8bf5'}), # End Div B1.1
             html.Div([ # Div B1.2 - SubTitle
-                html.H3('The underrepresentation of female athletes in Olympic Games (1896 to 2014)'),
+                html.H3('Using Olympic Medals to understand the underrepresentation of female athletes (1896 to 2014)'),
             ], style={'text-align': 'center', 'color':'#4c8bf5'}), # End Div B1.2
         ],), # End Div B1
 

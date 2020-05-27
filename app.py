@@ -232,7 +232,7 @@ html.Div([ # DIV A - LEFT COLUMN
         html.Div([ # Div B3 - Gender Percentage
             html.Div([ # Div B3.1 - Title
                 html.H3('The gap'),
-                html.H5('More than 100 years later, gender equality still is not a reality in the Olympic Games.'),
+                html.H5('More than 100 years later, gender equality is still not a reality in the Olympic Games.'),
                         'Use the Filter Menu and hover over the graphs to find the gap between men and women Olympic medalists',
             ]),# End Div B3.1
 

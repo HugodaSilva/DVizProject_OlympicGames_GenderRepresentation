@@ -252,7 +252,7 @@ app.layout = html.Div([
             html.Div([  # Div B4.1 - Title
                 html.H3('The changing path'),
                 html.H5('Women have not always been allowed to participate in the Olympic Games. '),
-                'In 1900, women competed in three mixed events - sailing, croquet and equestrian, and two women events - tennis and golf.'
+                'In 1900, women competed in three mixed events - sailing, croquet and equestrian, and two women events - tennis and golf. '
                 'Like women participation, the number of events has steadily increased since then, with some notable landmarks.'
             ]),  # End Div B4.1
 

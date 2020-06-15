@@ -252,18 +252,20 @@ app.layout = html.Div([
             html.Div([  # Div B4.1 - Title
                 html.H3('The changing path'),
                 html.H5('Women have not always been allowed to participate in the Olympic Games. '),
-                'In 1900, women competed in three mixed events - sailing, croquet and equestrian, and two women events - tennis and golf. '
-                'Like women participation, the number of events has steadily increased since then, with some notable landmarks.'
+                'In 1900, women competed in two mixed events - tennis and golf. '
+                'Like women participation, the number of events in the Olyimpics has steadily increased over time.'
             ]),  # End Div B4.1
 
             html.Div([  # Div B4.2 -Stacked 100%
                 dcc.Graph(id='Gender_Swap'),
             ], style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}),
             # End Div B4.2
-            html.Div('In 2000, in Sydney, women weightlifting was included, followed, four years later, by wrestling and fencing in Athens.'),
-            html.Div('Among the men-only events are the 50km race walk and canoeing, which the IOC says will change in 2020.'),
-            html.Div('Of course, two events discriminate against men as they are women-only - synchronised swimming and rhythmic gymnastics.'),
-            html.Div('In the London Games 2012, for the first time ever, there was at least one woman in every delegation.'),
+            html.Div('With some notable landmarks worth noting: in 2000, in Sydney, women weightlifting was included, followed, four years later, by wrestling and fencing in Athens.'),
+            html.Div('Women boxed for the first time in the 2012 London Games.'),
+           
+            html.Div('As additional notes, in the London Games 2012, for the first time ever, there was at least one woman in every delegation.'),
+            html.Div('The IOC says it will change some of the men-only events,such as the 50km race walk and canoeing, from 2020 onwards.'),
+            html.Div('As for the one event that discriminate against men, as it is women-only - softball, and still there is no calendar for it to evolve to a mixed sport.'),
             html.Div([  # Div B4.3 - Heatmap
                 dcc.Graph(id='Gender_Participation'),
             ], style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}),

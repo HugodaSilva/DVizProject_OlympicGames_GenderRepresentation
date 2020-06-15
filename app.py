@@ -260,9 +260,9 @@ app.layout = html.Div([
                 dcc.Graph(id='Gender_Swap'),
             ], style={'text-align': 'center', 'vertical-align': 'middle', 'horizontal-align': 'middle'}),
             # End Div B4.2
-            html.Div('With some notable landmarks worth noting: in 2000, in Sydney, women weightlifting was included, followed, four years later, by wrestling and fencing in Athens.Women boxed for the first time in the 2012 London Games.'),
-         
-            html.Div('As additional notes, in the London Games 2012, for the first time ever, there was at least one woman in every delegation.'),
+            html.Div('With some notable landmarks worth noting: in 2000, in Sydney, women weightlifting was included.'),
+            html.Div( 'This move was followed, four years later, by wrestling and fencing in Athens. Women boxed for the first time in 2012.')
+            html.Div('As additional notes, it is also worth pointing out that in the London Games 2012, for the first time ever, there was at least one woman in every delegation.'),
             html.Div('The IOC says it will change some of the men-only events, such as the 50km race walk and canoeing, from 2020 onwards.'),
             html.Div('As for the one event discriminating against men - softball -, there is still no calendar for it to become a mixed sport.'),
             html.Div([  # Div B4.3 - Heatmap
